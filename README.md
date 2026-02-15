@@ -148,16 +148,6 @@ Header: `Authorization: Bearer <token>`
 | image_url | String | URL gambar (cache dari Unsplash) |
 | created_at | Date | Auto |
 
-## 🔑 Akun Demo
-
-Setelah menjalankan `npm run seed`:
-
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | abdi@example.com | rabbani |
-| User | rani@example.com | rani123 |
-| User | siti@example.com | siti123 |
-
 ## 🛠️ Tech Stack
 
 | Layer | Teknologi |

@@ -5,20 +5,38 @@ Aplikasi resep masakan khusus untuk ibu-ibu PKK. Dibangun dengan **Node.js**, **
 ## 📁 Struktur Proyek
 
 ```
-Tugas Akhir Fullstack/
-├── database/       # Backend API (Express.js + MongoDB)
-├── website/        # Frontend Web (React + Vite)
-└── mobile/         # Mobile App (React Native + Expo)
+rahasia-dapur/
+├── database/          # Backend API (Express.js + MongoDB)
+│   ├── models/        # Schema MongoDB (User, Recipe)
+│   ├── routes/        # API routes (auth, recipes)
+│   ├── middleware/     # JWT auth middleware
+│   ├── seed.js        # Seeder data awal
+│   ├── server.js      # Entry point
+│   └── .env.example   # Template konfigurasi environment
+├── website/           # Frontend Web (React + Vite)
+│   └── src/
+│       ├── pages/     # Home, Login, Register, RecipeDetail
+│       └── api.js     # Axios instance
+└── mobile/            # Mobile App (React Native + Expo)
+    └── src/
+        ├── screens/   # HomeScreen, LoginScreen, dll
+        └── api.js     # Axios instance
 ```
 
 ## ⚙️ Prasyarat
 
-Pastikan sudah terinstall:
+Pastikan sudah terinstall di komputer kamu:
 
-- [Node.js](https://nodejs.org/) v18+
-- [MongoDB](https://www.mongodb.com/try/download/community) (lokal atau Atlas)
-- [Expo CLI](https://docs.expo.dev/) (untuk mobile)
-- [Git](https://git-scm.com/)
+| Software | Version | Link Download |
+|----------|---------|--------------|
+| Node.js | v18+ | [nodejs.org](https://nodejs.org/) |
+| MongoDB | v6+ | [mongodb.com](https://www.mongodb.com/try/download/community) |
+| Git | Terbaru | [git-scm.com](https://git-scm.com/) |
+| Expo Go (HP) | Terbaru | [App Store](https://apps.apple.com/app/expo-go/id982107779) / [Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent) |
+
+> **Catatan:** MongoDB harus dalam keadaan **running** sebelum menjalankan backend. Kalau pakai Windows, pastikan service MongoDB sudah aktif.
+
+---
 
 ## 🚀 Cara Setup
 
@@ -29,47 +47,77 @@ git clone https://github.com/username/rahasia-dapur.git
 cd rahasia-dapur
 ```
 
-### 2. Setup Backend (database)
+---
+
+### 2. Setup Backend
 
 ```bash
 cd database
 npm install
 ```
 
-Buat file `.env` di folder `database/`:
+**Konfigurasi Environment:**
+
+```bash
+# Copy template environment
+cp .env.example .env
+```
+
+> **Di Windows (CMD):** pakai `copy .env.example .env`
+> **Di Windows (PowerShell):** pakai `Copy-Item .env.example .env`
+
+Buka file `database/.env` dan isi variabelnya:
 
 ```env
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/moms_receipe
-JWT_SECRET=rahasia_dapur_secret_key_2026
-UNSPLASH_ACCESS_KEY=your_unsplash_key_here
+JWT_SECRET=buat_secret_key_random_kamu_disini
+UNSPLASH_ACCESS_KEY=isi_dengan_unsplash_access_key
 ```
 
-> **📌 Unsplash API Key**
-> Gambar resep diambil otomatis dari Unsplash. Untuk mengaktifkan fitur ini:
-> 1. Daftar di [unsplash.com/developers](https://unsplash.com/developers) (gratis)
-> 2. Buat "New Application"
+| Variable | Keterangan | Wajib? |
+|----------|-----------|--------|
+| `PORT` | Port server backend | ✅ (default: 5000) |
+| `MONGO_URI` | Connection string MongoDB | ✅ |
+| `JWT_SECRET` | Secret key untuk token autentikasi (bebas, minimal 20 karakter) | ✅ |
+| `UNSPLASH_ACCESS_KEY` | API key dari Unsplash untuk gambar resep | ❌ Opsional |
+
+> **📌 Cara dapat Unsplash API Key (opsional):**
+> 1. Daftar gratis di [unsplash.com/developers](https://unsplash.com/developers)
+> 2. Klik "New Application" → setujui terms → buat app
 > 3. Copy **Access Key** → paste di `.env`
 >
-> Tanpa key ini, aplikasi tetap berjalan — hanya gambar yang tidak akan muncul.
+> Tanpa key ini, aplikasi **tetap berjalan normal** — hanya gambar resep yang tidak akan muncul.
 
-Jalankan seeder untuk mengisi data awal:
+**Isi data awal (seeder):**
 
 ```bash
 npm run seed
 ```
 
-Jalankan server:
+**Jalankan backend server:**
 
 ```bash
+# Production
 npm start
-# atau untuk development (auto-restart):
+
+# Development (auto-restart saat file berubah)
 npm run dev
 ```
 
-Server berjalan di `http://localhost:5000`
+✅ Kalau berhasil, akan muncul:
+```
+✅ Berhasil konek ke MongoDB
+🚀 Server jalan di http://localhost:5000
+```
 
-### 3. Setup Website (website)
+---
+
+### 3. Setup Website
+
+> ⚠️ Pastikan backend sudah jalan di `http://localhost:5000` sebelum menjalankan website.
+
+Buka terminal baru:
 
 ```bash
 cd website
@@ -77,62 +125,77 @@ npm install
 npm run dev
 ```
 
-Website berjalan di `http://localhost:5173`
+✅ Website berjalan di `http://localhost:5173`
 
-### 4. Setup Mobile (mobile)
+Buka browser → akses `http://localhost:5173` → daftar akun baru → mulai jelajahi resep!
+
+---
+
+### 4. Setup Mobile App
+
+> ⚠️ Pastikan backend sudah jalan dan HP terhubung ke **WiFi yang sama** dengan komputer.
+
+Buka terminal baru:
 
 ```bash
 cd mobile
 npm install
 ```
 
-⚠️ **Penting:** Sebelum menjalankan, ubah IP address di `mobile/src/api.js` sesuai IP lokal komputermu:
+**Penting — ubah IP address:**
+
+Buka file `mobile/src/api.js`, ganti IP address sesuai IP lokal komputermu:
 
 ```javascript
-const API_URL = 'http://192.168.x.x:5000/api'; // ganti dengan IP lokal kamu
+const API_URL = 'http://192.168.x.x:5000/api';  // ganti dengan IP lokal kamu
 ```
 
 Cara cek IP lokal:
-- **Windows:** `ipconfig` → cari IPv4 Address
-- **Mac/Linux:** `ifconfig` → cari inet
+- **Windows:** buka CMD → ketik `ipconfig` → cari **IPv4 Address**
+- **Mac:** buka Terminal → ketik `ifconfig` → cari **inet**
 
-Lalu jalankan:
+Jalankan Expo:
 
 ```bash
 npx expo start
 ```
 
-Scan QR code dengan Expo Go di HP.
+✅ Scan QR code yang muncul di terminal menggunakan app **Expo Go** di HP.
+
+---
 
 ## 📡 API Endpoints
 
 Base URL: `http://localhost:5000/api`
 
-### Auth
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| POST | `/auth/register` | Daftar akun baru |
-| POST | `/auth/login` | Login |
+### Auth (Public)
+| Method | Endpoint | Body | Deskripsi |
+|--------|----------|------|-----------|
+| POST | `/auth/register` | `{ username, email, password }` | Daftar akun baru |
+| POST | `/auth/login` | `{ email, password }` | Login, mendapat token |
 
-### Recipes (membutuhkan token)
+### Recipes (Perlu Token)
+
+Tambahkan header: `Authorization: Bearer <token>`
+
 | Method | Endpoint | Deskripsi |
 |--------|----------|-----------|
 | GET | `/recipes` | Ambil semua resep |
-| GET | `/recipes/:id` | Ambil detail resep |
+| GET | `/recipes/:id` | Ambil detail satu resep |
 | PATCH | `/recipes/:id/image` | Fetch & cache gambar dari Unsplash |
 
-Header: `Authorization: Bearer <token>`
+---
 
-## 🗃️ Struktur Database (MongoDB)
+## 🗃️ Database Schema
 
 ### Collection: `users`
 | Field | Type | Keterangan |
 |-------|------|------------|
-| username | String | Unik |
-| email | String | Unik |
-| password | String | Di-hash dengan bcrypt |
+| username | String | Unik, wajib |
+| email | String | Unik, wajib |
+| password | String | Di-hash otomatis (bcrypt) |
 | role | String | `admin` / `user` |
-| created_at | Date | Auto |
+| created_at | Date | Otomatis |
 
 ### Collection: `receipes`
 | Field | Type | Keterangan |
@@ -140,13 +203,15 @@ Header: `Authorization: Bearer <token>`
 | title | String | Nama resep |
 | description | String | Deskripsi singkat |
 | difficulty | String | `Easy` / `Medium` / `Hard` |
-| cook_time | String | Waktu masak |
+| cook_time | String | Contoh: "30 menit" |
 | author_id | ObjectId | Referensi ke `users` |
 | tags | [String] | Tag/kategori |
 | ingredients | [String] | Daftar bahan |
 | steps | [String] | Langkah memasak |
-| image_url | String | URL gambar (cache dari Unsplash) |
-| created_at | Date | Auto |
+| image_url | String | URL gambar (auto-cache dari Unsplash) |
+| created_at | Date | Otomatis |
+
+---
 
 ## 🛠️ Tech Stack
 
@@ -156,19 +221,19 @@ Header: `Authorization: Bearer <token>`
 | Frontend Web | React, Vite, React Router, Axios |
 | Mobile | React Native, Expo, React Navigation |
 | Auth | JWT (JSON Web Token), bcryptjs |
-| Image API | Unsplash API (dengan caching ke DB) |
+| Image | Unsplash API (dengan caching ke database) |
 
 ## 📝 Fitur
 
-- ✅ Register & Login (JWT auth)
-- ✅ Lihat daftar resep dengan pagination
-- ✅ Search resep berdasarkan nama, deskripsi, atau tag
+- ✅ Register & Login (JWT authentication)
+- ✅ Daftar resep dengan pagination
+- ✅ Search berdasarkan nama, deskripsi, atau tag
 - ✅ Filter berdasarkan tingkat kesulitan
 - ✅ Sort resep (terbaru, A-Z, kesulitan)
-- ✅ Detail resep lengkap (bahan + langkah)
-- ✅ Gambar resep otomatis dari Unsplash (cached)
+- ✅ Detail resep lengkap (bahan & langkah)
+- ✅ Gambar resep otomatis dari Unsplash (di-cache ke database)
 - ✅ Responsive web + mobile app
 
 ## 📄 Lisensi
 
-Proyek ini dibuat untuk Tugas Akhir.
+Proyek ini dibuat sebagai Tugas Akhir Fullstack Development.

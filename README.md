@@ -213,7 +213,7 @@ Tambahkan header: `Authorization: Bearer <token>`
 
 ---
 
-## 🛠️ Tech Stack
+## ️ Tech Stack
 
 | Layer | Teknologi |
 |-------|-----------|
